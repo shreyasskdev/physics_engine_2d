@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 libm = "*"
+rand = "*"
 # sdl2 = { version = "*", features = ["gfx"] }
 
 [dependencies.sdl2]

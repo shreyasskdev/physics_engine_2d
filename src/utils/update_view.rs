@@ -1,3 +1,5 @@
+use std::f64::consts::PI;
+
 use sdl2::{
     pixels::Color,
     rect::Rect,
@@ -7,26 +9,23 @@ use sdl2::{
 };
 
 use super::vector::Vector;
+use super::particle::{self, Particle};
 
 pub struct Renderer {
     pub screen_area: Rect,
     pub clear_color: Color,
 
-    pub x: f64,
-    pub y: f64,
 
-    position: Vector
+    particles: Vec<Particle>
 }
 
 impl Renderer {
-    pub fn new(x: f64, y: f64, screen_area: Rect, clear_color: Color) -> Renderer {
+    pub fn new(screen_area: Rect, clear_color: Color, particles: Vec<Particle>) -> Renderer {
         Renderer {
             screen_area,
             clear_color,
-            x,
-            y,
 
-            position: Vector::new(100.0, 100.0),
+            particles,
         }
     }
     pub fn update(&mut self, canvas: &mut Canvas<Window>) {
@@ -36,11 +35,10 @@ impl Renderer {
 
         canvas.set_draw_color(Color::RGB(200, 200, 200));
 
-        canvas.aa_circle(self.x as i16 , self.y as i16, 50, Color::RGB(200, 200, 200)).ok().unwrap_or_default();
-
-        
-
-        self.y = self.y + 1.0;
+        for particle in self.particles.iter_mut() {
+            particle.update();
+            canvas.aa_circle(particle.position.get_x() as i16 , particle.position.get_y() as i16, 10, Color::RGB(200, 200, 200)).ok().unwrap_or_default();
+        }
     }
     
     

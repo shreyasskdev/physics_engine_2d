@@ -1,7 +1,8 @@
 use libm::{cos, sin, atan2, sqrt};
 use std::ops::{Add, Sub, Mul, Div, AddAssign, SubAssign, MulAssign, DivAssign};
 
-pub struct Vector{
+#[derive(Copy, Clone)]
+pub struct  Vector{
     _x: f64,
     _y: f64,
 }
