@@ -1,5 +1,3 @@
-use std::f64::consts::PI;
-
 use sdl2::{
     pixels::Color,
     rect::Rect,
@@ -8,15 +6,14 @@ use sdl2::{
     gfx::primitives::DrawRenderer,
 };
 
-use super::vector::Vector;
-use super::particle::{self, Particle};
+use super::particle::Particle;
 
 pub struct Renderer {
     pub screen_area: Rect,
     pub clear_color: Color,
 
 
-    particles: Vec<Particle>
+    particles: Vec<Particle>,
 }
 
 impl Renderer {
@@ -37,7 +34,7 @@ impl Renderer {
 
         for particle in self.particles.iter_mut() {
             particle.update();
-            canvas.aa_circle(particle.position.get_x() as i16 , particle.position.get_y() as i16, 10, Color::RGB(200, 200, 200)).ok().unwrap_or_default();
+            canvas.aa_circle(particle.position.get_x() as i16 , particle.position.get_y() as i16, 5, Color::RGB(200, 200, 200)).ok().unwrap_or_default();
         }
     }
     
