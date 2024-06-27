@@ -8,7 +8,9 @@ pub struct Particle{
     pub bounce: f32,
     pub radius: u32,
     // pub mass: f32
-}impl Particle{
+}
+#[allow(dead_code)]
+impl Particle{
     pub fn new(position: Vector, speed: f64, direction: f64, radius: u32, bounce: f32) -> Particle{
         let mut velocity = Vector::new(0.0, 0.0);
         velocity.set_length(speed);

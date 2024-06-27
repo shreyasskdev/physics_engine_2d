@@ -1,7 +1,8 @@
 use libm::sqrt;
-use super::{particle::Particle, vector::Vector};
+use super::particle::Particle;
 
 pub struct Utils{}
+#[allow(dead_code)]
 impl Utils{
     pub fn distance(v1: Particle, v2: Particle) -> f64{
         let dx = v1.position.get_x() - v2.position.get_x();
@@ -9,7 +10,6 @@ impl Utils{
 
         sqrt(dx * dx + dy* dy)
     }
-
     pub fn distance_xy(x1: f64, y1: f64, x2: f64, y2: f64) -> f64{
         let dx = x1 - x2;
         let dy = y1 - y2;

@@ -6,10 +6,8 @@ use sdl2::{
     gfx::primitives::DrawRenderer,
 };
 
-use super::particle::{self, Particle};
+use super::particle::Particle;
 use super::utils::Utils;
-
-use rand::Rng;
 
 pub struct World {
     pub screen_area: Rect,
