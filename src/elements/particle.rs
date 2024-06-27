@@ -1,5 +1,6 @@
 use super::vector::Vector;
 
+#[derive(Clone, Copy)]
 pub struct Particle{
     pub position: Vector,
     pub velocity: Vector,

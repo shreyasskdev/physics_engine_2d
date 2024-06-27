@@ -6,8 +6,8 @@ use sdl2::{
 };
 
 
-mod utils;
-use utils::{particle::Particle, update_view::Renderer, vector::Vector};
+mod elements;
+use elements::{particle::Particle, universe::World, vector::Vector};
 
 fn main() -> Result<(), String> {
     let width :u32 = 1600;
@@ -28,17 +28,17 @@ fn main() -> Result<(), String> {
     let clear_color = sdl2::pixels::Color::RGB(10, 10, 10, );
     let mut particles: Vec<Particle> = Vec::new();
 
-    for _i in 0..2000{
+    for _i in 0..50{
         particles.push(Particle::new_with_gravity(Vector::new((width/2) as f64, (height/3) as f64),
         rand::thread_rng().gen_range(0.1..20.0),
     rand::thread_rng().gen_range(0.0..PI*2.0),
-        10,
+        20,
         -0.9,
       Vector::new(0.0, 0.1)
             ));
     }
 
-    let mut update_view: Renderer = Renderer::new(screen_area, clear_color, (width, height), particles);
+    let mut system: World = World::new(screen_area, clear_color, (width, height), particles);
 
 
     let mut running = true;
@@ -59,7 +59,7 @@ fn main() -> Result<(), String> {
             }
         }
 
-        update_view.update(&mut canvas);
+        system.update(&mut canvas);
 
         canvas.present();
         fps_manager.delay();
