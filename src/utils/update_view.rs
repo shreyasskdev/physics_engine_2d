@@ -12,15 +12,17 @@ pub struct Renderer {
     pub screen_area: Rect,
     pub clear_color: Color,
 
+    pub screen_dimension: (u32, u32),
 
     particles: Vec<Particle>,
 }
 
 impl Renderer {
-    pub fn new(screen_area: Rect, clear_color: Color, particles: Vec<Particle>) -> Renderer {
+    pub fn new(screen_area: Rect, clear_color: Color, screen_dimension: (u32, u32), particles: Vec<Particle>) -> Renderer {
         Renderer {
             screen_area,
             clear_color,
+            screen_dimension,
 
             particles,
         }
@@ -34,7 +36,25 @@ impl Renderer {
 
         for particle in self.particles.iter_mut() {
             particle.update();
-            canvas.aa_circle(particle.position.get_x() as i16 , particle.position.get_y() as i16, 5, Color::RGB(200, 200, 200)).ok().unwrap_or_default();
+            canvas.aa_circle(particle.position.get_x() as i16 , particle.position.get_y() as i16, particle.radius as i16, Color::RGB(200, 200, 200)).ok().unwrap_or_default();
+
+            //edge detection and edge bouncing
+            if (particle.position.get_x() - particle.radius as f64) <= 0.0 {
+                particle.position.set_x(particle.radius as f64);
+                particle.velocity.set_x(particle.velocity.get_x()* particle.bounce as f64);
+            }
+            if (particle.position.get_x() + particle.radius as f64) >= self.screen_dimension.0 as f64 {
+                particle.position.set_x((self.screen_dimension.0 - particle.radius) as f64);
+                particle.velocity.set_x(particle.velocity.get_x()* particle.bounce as f64);
+            }
+            if (particle.position.get_y() - particle.radius as f64) <= 0.0 {
+                particle.position.set_y(particle.radius as f64);
+                particle.velocity.set_y(particle.velocity.get_y()* particle.bounce as f64);
+            }
+            if (particle.position.get_y() + particle.radius as f64) >= self.screen_dimension.1 as f64 {
+                particle.position.set_y((self.screen_dimension.1 - particle.radius) as f64);
+                particle.velocity.set_y(particle.velocity.get_y()* particle.bounce as f64);
+            }
         }
     }
     
