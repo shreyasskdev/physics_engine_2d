@@ -28,11 +28,11 @@ fn main() -> Result<(), String> {
     let clear_color = sdl2::pixels::Color::RGB(10, 10, 10, );
     let mut particles: Vec<Particle> = Vec::new();
 
-    for _i in 0..20{
+    for _i in 0..2000{
         particles.push(Particle::new_with_gravity(Vector::new((width/2) as f64, (height/3) as f64),
         rand::thread_rng().gen_range(0.1..20.0),
     rand::thread_rng().gen_range(0.0..PI*2.0),
-        50,
+        10,
         -0.9,
       Vector::new(0.0, 0.1)
             ));

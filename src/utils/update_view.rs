@@ -14,6 +14,7 @@ pub struct Renderer {
 
     pub screen_dimension: (u32, u32),
 
+    friction: f32,
     particles: Vec<Particle>,
 }
 
@@ -24,6 +25,7 @@ impl Renderer {
             clear_color,
             screen_dimension,
 
+            friction: 0.9,
             particles,
         }
     }
@@ -42,18 +44,22 @@ impl Renderer {
             if (particle.position.get_x() - particle.radius as f64) <= 0.0 {
                 particle.position.set_x(particle.radius as f64);
                 particle.velocity.set_x(particle.velocity.get_x()* particle.bounce as f64);
+                particle.velocity *= self.friction as f64;
             }
             if (particle.position.get_x() + particle.radius as f64) >= self.screen_dimension.0 as f64 {
                 particle.position.set_x((self.screen_dimension.0 - particle.radius) as f64);
                 particle.velocity.set_x(particle.velocity.get_x()* particle.bounce as f64);
+                particle.velocity *= self.friction as f64;
             }
             if (particle.position.get_y() - particle.radius as f64) <= 0.0 {
                 particle.position.set_y(particle.radius as f64);
                 particle.velocity.set_y(particle.velocity.get_y()* particle.bounce as f64);
+                particle.velocity *= self.friction as f64;
             }
             if (particle.position.get_y() + particle.radius as f64) >= self.screen_dimension.1 as f64 {
                 particle.position.set_y((self.screen_dimension.1 - particle.radius) as f64);
                 particle.velocity.set_y(particle.velocity.get_y()* particle.bounce as f64);
+                particle.velocity *= self.friction as f64;
             }
         }
     }
