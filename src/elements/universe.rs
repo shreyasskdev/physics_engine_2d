@@ -1,3 +1,4 @@
+
 use sdl2::{
     pixels::Color,
     rect::Rect,
@@ -8,6 +9,7 @@ use sdl2::{
 
 use super::particle::Particle;
 use super::utils::Utils;
+use super::vector::Vector;
 
 pub struct World {
     pub screen_area: Rect,
@@ -69,13 +71,35 @@ impl World {
         for i in 0..self.particles.len(){
             for j in (i+1)..self.particles.len(){
                 if Utils::circle_collide(self.particles[i], self.particles[j]){
-                    // println!("CoLLideD!{} ", rand::thread_rng().gen_range(0.1..20.0));
-                    canvas.aa_circle(self.particles[i].position.get_x() as i16 , self.particles[i].position.get_y() as i16, (self.particles[i].radius) as i16, Color::RGB(255, 50, 50)).ok().unwrap_or_default();
-                    canvas.aa_circle(self.particles[j].position.get_x() as i16 , self.particles[j].position.get_y() as i16, (self.particles[i].radius) as i16, Color::RGB(255, 50, 50)).ok().unwrap_or_default();
+                    collision_response(&mut self.particles, i, j);
                 }
             }
         }
-    }
-    
-    
+    }    
+}
+
+fn collision_response(particles: &mut Vec<Particle>, i:usize, j:usize ){
+
+    penetration_resolution(particles, i, j);
+ 
+    let normal = (particles[i].position - particles[j].position).unit();
+    let relative_velocity = particles[i].velocity - particles[j].velocity;
+    let seperating_velocity = Vector::dot(relative_velocity, normal);
+
+    let restitution = -particles[i].bounce as f64;
+
+    let new_seperating_velocity = -seperating_velocity;
+    let seperating_velocity_vector = normal * new_seperating_velocity * restitution;
+
+    particles[i].velocity += seperating_velocity_vector;
+    particles[j].velocity -= seperating_velocity_vector;
+}
+
+fn penetration_resolution(particles: &mut Vec<Particle>, i:usize, j:usize){
+
+    let distance = particles[i].position - particles[j].position;
+    let penetration_depth = (particles[i].radius + particles[j].radius) as f64 - distance.get_length();
+    let penetration_resolution = distance.unit() * (penetration_depth / 2.0);
+    particles[i].position += penetration_resolution;
+    particles[j].position -= penetration_resolution;
 }

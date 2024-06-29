@@ -7,11 +7,11 @@ pub struct Particle{
     pub gravity: Option<Vector>,
     pub bounce: f32,
     pub radius: u32,
-    // pub mass: f32
+    pub mass: f32
 }
 #[allow(dead_code)]
 impl Particle{
-    pub fn new(position: Vector, speed: f64, direction: f64, radius: u32, bounce: f32) -> Particle{
+    pub fn new(position: Vector, speed: f64, direction: f64, radius: u32, bounce: f32, mass: f32) -> Particle{
         let mut velocity = Vector::new(0.0, 0.0);
         velocity.set_length(speed);
         velocity.set_angle(direction);
@@ -21,10 +21,11 @@ impl Particle{
             velocity,
             bounce,
             radius,
+            mass,
             gravity: None,
         }
     }
-    pub fn new_with_gravity(position: Vector, speed: f64, direction: f64, radius: u32, bounce: f32, gravity: Vector) -> Particle{
+    pub fn new_with_gravity(position: Vector, speed: f64, direction: f64, radius: u32, bounce: f32, mass: f32,  gravity: Vector) -> Particle{
         let mut velocity = Vector::new(0.0, 0.0);
         velocity.set_length(speed);
         velocity.set_angle(direction);
@@ -34,6 +35,7 @@ impl Particle{
             velocity,
             bounce,
             radius,
+            mass,
             gravity: Some(gravity),
         }
     }
@@ -42,7 +44,6 @@ impl Particle{
     }
     pub fn update(&mut self) {
         self.position += self.velocity;
-        // self.velocity += self.gravity
         match self.gravity {
             Some(gravity) => {self.velocity += gravity}
             None => return

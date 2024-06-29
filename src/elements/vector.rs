@@ -7,6 +7,7 @@ pub struct  Vector{
     _y: f64,
 }
 
+#[allow(dead_code)]
 impl Vector {
     pub fn new(x: f64, y: f64) -> Vector {
         Self { _x: x, _y: y }
@@ -43,6 +44,21 @@ impl Vector {
     }
     pub fn get_length(&self) -> f64 {
         sqrt(self._x * self._x + self._y * self._y)
+    }
+
+    pub fn unit(&self) -> Vector {
+        if self.get_length() == 0.0 {
+            return Vector::new(0.0, 0.0);
+        } else {
+            return Vector::new(self._x / self.get_length(), self._y / self.get_length());
+        }
+    }
+    pub fn normal(&self) -> Vector {
+        return Vector::new(-self._y, self._x).unit();
+    }
+
+    pub fn dot(v1: Vector, v2: Vector) -> f64 {
+        return v1._x * v2._x + v1._y * v2._y;
     }
 }
 
