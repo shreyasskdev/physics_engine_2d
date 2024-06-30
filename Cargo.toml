@@ -4,7 +4,6 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-libm = "*"
 rand = "*"
 # sdl2 = { version = "*", features = ["gfx"] }
 

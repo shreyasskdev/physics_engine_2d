@@ -1,4 +1,3 @@
-use libm::{cos, sin, atan2, sqrt};
 use std::ops::{Add, Sub, Mul, Div, AddAssign, SubAssign, MulAssign, DivAssign};
 
 #[derive(Copy, Clone)]
@@ -30,20 +29,20 @@ impl Vector {
 
     pub fn set_angle(&mut self, angle: f64) {
         let length = self.get_length();
-        self._x = cos(angle) * length;
-        self._y = sin(angle)  * length;
+        self._x = angle.cos() * length;
+        self._y = angle.sin()  * length;
     }
     pub fn get_angle(&self) -> f64 {
-        atan2(self._y, self._x)
+        f64::atan2(self._y, self._x)
     }
 
     pub fn set_length(&mut self, length: f64) {
         let angle = self.get_angle();
-        self._x = cos(angle) * length;
-        self._y = sin(angle) * length;
+        self._x = angle.cos() * length;
+        self._y = angle.sin() * length;
     }
     pub fn get_length(&self) -> f64 {
-        sqrt(self._x * self._x + self._y * self._y)
+        f64::sqrt(self._x * self._x + self._y * self._y)
     }
 
     pub fn unit(&self) -> Vector {
