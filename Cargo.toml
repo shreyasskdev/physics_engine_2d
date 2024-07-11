@@ -5,17 +5,22 @@ edition = "2021"
 
 [dependencies]
 rand = "*"
-# sdl2 = { version = "*", features = ["gfx"] }
+sdl2 = { version = "0.37.0", features = ["gfx", "ttf"] }
 
-[dependencies.sdl2]
-version = "0.37.0"
-default-features = false
-features = ["static-link", "use-vcpkg", "gfx"]
+# [dependencies.sdl2]
+# version = "0.37"
+# default-features = false
+# features = ["ttf","image","gfx","mixer"]
 
-[package.metadata.vcpkg]
-dependencies = ["sdl2", "sdl2-gfx"]
-git = "https://github.com/microsoft/vcpkg"
-rev = "501db0f"
+# [dependencies.sdl2]
+# version = "0.37.0"
+# default-features = false
+# features = ["static-link", "use-vcpkg", "gfx"]
 
-[package.metadata.vcpkg.target]
-x86_64-pc-windows-msvc = { triplet = "x64-windows-static-md" }
+# [package.metadata.vcpkg]
+# dependencies = ["sdl2", "sdl2-gfx", "sdl2-image", "sdl2-ttf"]
+# git = "https://github.com/microsoft/vcpkg"
+# rev = "501db0f"
+
+# [package.metadata.vcpkg.target]
+# x86_64-pc-windows-msvc = { triplet = "x64-windows-static-md" }
