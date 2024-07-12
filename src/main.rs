@@ -2,7 +2,15 @@ use std::{f64::consts::PI, time::{Duration, Instant}};
 
 use rand::Rng;
 use sdl2::{
-    event::Event, gfx::framerate::FPSManager, pixels::Color, rect::Rect, render::{CanvasBuilder, TextureQuery}, surface, ttf, Sdl
+    event::Event, gfx::framerate::FPSManager,
+    pixels::Color,
+    rect::Rect, 
+    render::{
+        CanvasBuilder, 
+        TextureQuery
+    }, 
+    ttf, 
+    Sdl
 };
 
 mod elements;
@@ -56,6 +64,8 @@ fn main() -> Result<(), String> {
     let mut last_time = Instant::now();
     let mut fps = 60.00;
 
+    let mut mouse_pressed: bool = false;
+
     while running{
 
         for event in event_queue.poll_iter(){
@@ -64,6 +74,20 @@ fn main() -> Result<(), String> {
                 Event::Quit {..} => {
                     running = false;
                 }
+                Event::MouseButtonDown { x, y, .. } => {
+                    mouse_pressed = true;
+                    system.handle_click(x, y, mouse_pressed);
+                }
+                Event::MouseButtonUp { x, y, .. } => {
+                    mouse_pressed = false;
+                    system.handle_click(x, y, mouse_pressed);
+                }
+                Event::MouseMotion { x, y, .. } => {
+                    if mouse_pressed {
+                        system.handle_click(x, y, mouse_pressed);
+                    }              
+                }
+                
                 _ => {}
             }
         }
