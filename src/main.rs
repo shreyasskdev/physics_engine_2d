@@ -24,6 +24,7 @@ fn main() -> Result<(), String> {
     let video_subsystem = sdl_context.video()?;
     let ttf_context = ttf::init().map_err(|e| e.to_string())?;
     let window = video_subsystem.window("2d physics engine", width, height)
+        .opengl()
         .build()
         .unwrap();
     let mut canvas = CanvasBuilder::new(window)
@@ -37,11 +38,11 @@ fn main() -> Result<(), String> {
     let clear_color = sdl2::pixels::Color::RGB(10, 10, 10, );
     let mut particles: Vec<Particle> = Vec::new();
 
-    for _i in 0..5{
+    for _i in 0..200{
         particles.push(Particle::new_with_gravity(Vector::new(rand::thread_rng().gen_range(0.1..width as f64), rand::thread_rng().gen_range(0.1..height as f64)),
         rand::thread_rng().gen_range(0.1..50.0),
     rand::thread_rng().gen_range(0.0..PI*2.0),
-        50,
+        20,
         -0.9,
         10.0,
       Vector::new(0.0, 0.1)

@@ -22,6 +22,7 @@ pub struct World {
 
     // particle_index, particle gravity
     particle_tmp: (Option<usize>, Option<Vector>),
+    vel_tmp: (Vector, Vector)
 }
 
 impl World {
@@ -35,6 +36,7 @@ impl World {
             particles,
 
             particle_tmp: (None, None),
+            vel_tmp: (Vector::new(0.0, 0.0), Vector::new(0.0, 0.0)),
         }
     }
     pub fn update(&mut self, canvas: &mut Canvas<Window>) {
@@ -73,6 +75,17 @@ impl World {
             }
         }
 
+        // // Penetration resolution sampling (uncomment this block for better peneration resolution)
+        // for _ in 0..16 {
+        //     for i in 0..self.particles.len(){
+        //         for j in (i+1)..self.particles.len(){
+        //             if Utils::circle_collide(self.particles[i], self.particles[j]){
+        //                 penetration_resolution(& mut self.particles, i, j);
+        //             }
+        //         }
+        //     }
+        // }
+
         // Collision dectection between particles
         for i in 0..self.particles.len(){
             for j in (i+1)..self.particles.len(){
@@ -96,10 +109,20 @@ impl World {
                     if mouse_pressed {
                         self.particles[i].gravity = Some(Vector::new(0.0, 0.0));
                         self.particle_tmp.0 = Some(i);
+
+                        self.vel_tmp.0 = self.vel_tmp.1;
+                        self.vel_tmp.1 = Vector::new(x as f64, y as f64);
+                        
                     } else {
                         self.particles[i].gravity = self.particle_tmp.1;
                         self.particle_tmp.1 = None;
                         self.particle_tmp.0 = None;
+
+                        self.particles[i].velocity = Vector::new(x as f64, y as f64) - self.vel_tmp.0;
+                        self.particles[i].velocity.set_length(
+                            Utils::distance_xy(self.vel_tmp.0.get_x(), self.vel_tmp.0.get_y(), x as f64, y as f64)
+                        );
+                        
                     }
             }
 
