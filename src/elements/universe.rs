@@ -20,8 +20,7 @@ pub struct World {
     friction: f32,
     particles: Vec<Particle>,
 
-    // particle_index, particle gravity
-    particle_tmp: (Option<usize>, Option<Vector>),
+    particle_tmp: Option<usize>,
     vel_tmp: (Vector, Vector)
 }
 
@@ -35,7 +34,7 @@ impl World {
             friction: 0.9,
             particles,
 
-            particle_tmp: (None, None),
+            particle_tmp: None,
             vel_tmp: (Vector::new(0.0, 0.0), Vector::new(0.0, 0.0)),
         }
     }
@@ -100,34 +99,32 @@ impl World {
         for i in 0..self.particles.len(){
             if Utils::circle_collide(self.particles[i], Particle::new(Vector::new(x as f64, y as f64), 0.0, 0.0, 1, 0.0, 0.0)){
                     
-                    if mouse_pressed && self.particle_tmp.1.is_none(){
-                        self.particle_tmp.1 = self.particles[i].gravity;
-                    }
-                    
                     self.particles[i].velocity = Vector::new(0.0, 0.0);
                     self.particles[i].position = Vector::new(x as f64, y as f64);
                     if mouse_pressed {
-                        self.particles[i].gravity = Some(Vector::new(0.0, 0.0));
-                        self.particle_tmp.0 = Some(i);
+                        self.particle_tmp = Some(i);
 
                         self.vel_tmp.0 = self.vel_tmp.1;
                         self.vel_tmp.1 = Vector::new(x as f64, y as f64);
+
+                        self.particles[i].velocity = self.vel_tmp.1 - self.vel_tmp.0;
+                        self.particles[i].grabbed = true;
                         
                     } else {
-                        self.particles[i].gravity = self.particle_tmp.1;
-                        self.particle_tmp.1 = None;
-                        self.particle_tmp.0 = None;
+                        self.particle_tmp = None;
 
-                        self.particles[i].velocity = Vector::new(x as f64, y as f64) - self.vel_tmp.0;
-                        self.particles[i].velocity.set_length(
-                            Utils::distance_xy(self.vel_tmp.0.get_x(), self.vel_tmp.0.get_y(), x as f64, y as f64)
-                        );
-                        
+                        self.particles[i].velocity = self.vel_tmp.1 - self.vel_tmp.0;
+                        self.particles[i].grabbed = false;
                     }
+
+                   
             }
 
-            if self.particle_tmp.0.is_some(){
-                self.particles[self.particle_tmp.0.unwrap()].position = Vector::new(x as f64, y as f64);
+            if self.particle_tmp.is_some(){
+                self.particles[self.particle_tmp.unwrap()].position = Vector::new(x as f64, y as f64);
+                if i != self.particle_tmp.unwrap(){
+                    self.particles[i].grabbed = false;
+                }
             }
         }
     }    

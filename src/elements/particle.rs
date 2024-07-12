@@ -7,7 +7,8 @@ pub struct Particle{
     pub gravity: Option<Vector>,
     pub bounce: f32,
     pub radius: u32,
-    pub mass: f32
+    pub mass: f32,
+    pub grabbed: bool,
 }
 #[allow(dead_code)]
 impl Particle{
@@ -23,6 +24,7 @@ impl Particle{
             radius,
             mass,
             gravity: None,
+            grabbed: false,
         }
     }
     pub fn new_with_gravity(position: Vector, speed: f64, direction: f64, radius: u32, bounce: f32, mass: f32,  gravity: Vector) -> Particle{
@@ -37,13 +39,16 @@ impl Particle{
             radius,
             mass,
             gravity: Some(gravity),
+            grabbed: false,
         }
     }
     pub fn accelerate(&mut self, acceleration: Vector){
         self.velocity += acceleration
     }
     pub fn update(&mut self) {
-        self.position += self.velocity;
+        if !self.grabbed{
+            self.position += self.velocity;
+        }
         match self.gravity {
             Some(gravity) => {self.velocity += gravity}
             None => return
